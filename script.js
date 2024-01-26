@@ -61,33 +61,49 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-//Add movements 
-const displayMovements = function(movements){
+//Add movements
+const displayMovements = function (movements) {
+  //Cleaning the conteiner
 
- //Cleaning the conteiner
-
-//The Element property innerHTML gets or sets the HTML 
-//or XML markup contained within the element.
-//To insert the HTML into the document rather than replace 
-// the contents of an element, use the method insertAdjacentHTML(). -- MDN
+  //The Element property innerHTML gets or sets the HTML
+  //or XML markup contained within the element.
+  //To insert the HTML into the document rather than replace
+  // the contents of an element, use the method insertAdjacentHTML(). -- MDN
   containerMovements.innerHTML = '';
 
-//Add movements 
-    movements.forEach(function(mov, i){
-      const type = mov > 0 ? 'deposit' : 'withdrawal'
-      const html = `
+  //Add movements
+  movements.forEach(function (mov, i) {
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const html = `
         <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+          <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
           <div class="movements__value">${mov}</div>
         </div>
       `;
-      //The insertAdjacentHTML() method of the Element interface parses 
-      //the specified text as HTML or XML and inserts the resulting nodes 
-      //into the DOM tree at a specified position. --MDN
-      containerMovements.insertAdjacentHTML('afterbegin', html);
-    });
+    //The insertAdjacentHTML() method of the Element interface parses
+    //the specified text as HTML or XML and inserts the resulting nodes
+    //into the DOM tree at a specified position. --MDN
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
 };
 displayMovements(account1.movements);
+
+//ForEach method to create user name using account owner's initial letters
+const createUserNames = function(accs){
+  accs.forEach(function(acc){
+    acc.username = acc.owner
+    .toLowerCase()
+    .split(' ')
+    //for of loop create another new array with first letter of the name
+    .map(name => name[0])
+    //join this in one to create the initials togheter
+    .join('');
+  })
+}
+createUserNames(accounts);
+console.log(accounts);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
