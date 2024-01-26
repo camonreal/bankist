@@ -104,6 +104,12 @@ const createUserNames = function(accs){
 }
 createUserNames(accounts);
 
+const calcPrintBalance = function(movements){
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+}
+calcPrintBalance(account1.movements);
+
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -126,3 +132,11 @@ console.log(deposits);
 //create a filter method for create withdrawal array
 const withdrawal = movements.filter((mov) => mov < 0);
 console.log(withdrawal);
+
+//balence with reduce method 
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+console.log(balance);
+
+//maximum value
+const max = movements.reduce((acc, mov) => acc > mov ? acc : mov, movements[0]);
+console.log (max);
