@@ -91,25 +91,45 @@ const displayMovements = function (movements) {
 displayMovements(account1.movements);
 
 //ForEach method to create user name using account owner's initial letters
-const createUserNames = function(accs){
-  accs.forEach(function(acc){
+const createUserNames = function (accs) {
+  accs.forEach(function (acc) {
     acc.username = acc.owner
-    .toLowerCase()
-    .split(' ')
-    //for of loop create another new array with first letter of the name
-    .map(name => name[0])
-    //join this in one to create the initials togheter
-    .join('');
-  })
-}
+      .toLowerCase()
+      .split(' ')
+      //for of loop create another new array with first letter of the name
+      .map(name => name[0])
+      //join this in one to create the initials togheter
+      .join('');
+  });
+};
 createUserNames(accounts);
 
-const calcPrintBalance = function(movements){
+const calcPrintBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
-}
+  labelBalance.textContent = `${balance} €`;
+};
 calcPrintBalance(account1.movements);
 
+//Chaining methods 
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes} €`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)} €`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => int >= 1)
+    .reduce((acc, int) => acc + int, 0);
+    labelSumInterest.textContent = `${interest} €`;
+};
+calcDisplaySummary(account1.movements);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -126,17 +146,30 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 /////////////////////////////////////////////////
 
 //create a filter method for create deposits array
-const deposits = movements.filter((mov) => mov > 0);
+const deposits = movements.filter(mov => mov > 0);
 console.log(deposits);
 
 //create a filter method for create withdrawal array
-const withdrawal = movements.filter((mov) => mov < 0);
+const withdrawal = movements.filter(mov => mov < 0);
 console.log(withdrawal);
 
-//balence with reduce method 
+//balence with reduce method
 const balance = movements.reduce((acc, cur) => acc + cur, 0);
 console.log(balance);
 
 //maximum value
-const max = movements.reduce((acc, mov) => acc > mov ? acc : mov, movements[0]);
-console.log (max);
+const max = movements.reduce(
+  (acc, mov) => (acc > mov ? acc : mov),
+  movements[0]
+);
+console.log(max);
+
+//convert to usd
+const eurToUsd = 1.1;
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map((mov, i, arr) => {
+    mov * eurToUsd;
+  })
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepositsUSD);
