@@ -131,6 +131,24 @@ const calcDisplaySummary = function (movements) {
 };
 calcDisplaySummary(account1.movements);
 
+//implementing login
+let currentAccount;
+btnLogin.addEventListener('click', function(e){
+  e.preventDefault();
+  currentAccount = accounts.find( acc => acc.username === inputLoginUsername.value);
+
+  if(currentAccount.pin === Number (inputLoginPin.value)) {
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+    inputLoginUsername.value = inputLoginPin = '';
+    displayMovements(currentAccount.movements);
+    calcDisplayBalance(currentAccount.movements);
+    calcDisplaySummary(currentAccount.movements);
+
+  }
+})
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
