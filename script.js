@@ -61,6 +61,27 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+//ForEach method to create user name using account owner's initial letters
+const createUserNames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      //for of loop create another new array with first letter of the name
+      .map(name => name[0])
+      //join this in one to create the initials togheter
+      .join('');
+  });
+};
+createUserNames(accounts);
+
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} €`;
+};
+calcPrintBalance(account1.movements);
+
+
 //Add movements
 const displayMovements = function (movements) {
   //Cleaning the conteiner
@@ -88,48 +109,26 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
-
-//ForEach method to create user name using account owner's initial letters
-const createUserNames = function (accs) {
-  accs.forEach(function (acc) {
-    acc.username = acc.owner
-      .toLowerCase()
-      .split(' ')
-      //for of loop create another new array with first letter of the name
-      .map(name => name[0])
-      //join this in one to create the initials togheter
-      .join('');
-  });
-};
-createUserNames(accounts);
-
-const calcPrintBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} €`;
-};
-calcPrintBalance(account1.movements);
 
 //Chaining methods 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes} €`;
 
-  const out = movements
+  const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)} €`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => int >= 1)
     .reduce((acc, int) => acc + int, 0);
     labelSumInterest.textContent = `${interest} €`;
 };
-calcDisplaySummary(account1.movements);
 
 //implementing login
 let currentAccount;
@@ -143,12 +142,13 @@ btnLogin.addEventListener('click', function(e){
     }`;
     containerApp.style.opacity = 100;
     inputLoginUsername.value = inputLoginPin = '';
+    inputLoginPin.blur();
     displayMovements(currentAccount.movements);
     calcDisplayBalance(currentAccount.movements);
-    calcDisplaySummary(currentAccount.movements);
-
+    calcDisplaySummary(currentAccount);
   }
 })
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
