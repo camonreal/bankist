@@ -169,20 +169,31 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+//some method request ioan
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    currentAccount.movements.push(amount);
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+})
+
 //using findIndex method 
 //Close account function
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
   if (inputCloseUsername.value === currentAccount.username &&
-     Number(inputClosePin.value) === currentAccount.pin
-     ){
-      const index = accounts.findIndex(
-        acc => acc.username === currentAccount.username
-        );
-      accounts.splice(index, 1);
-      containerApp.style.opacity = 0;
-     }
-     inputCloseUsername.value = inputClosePin.value = '';
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
 })
 
 /////////////////////////////////////////////////
@@ -198,27 +209,27 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
-
-//create a filter method for create deposits array
+/*
+//create deposits array | filter
 const deposits = movements.filter(mov => mov > 0);
 console.log(deposits);
 
-//create a filter method for create withdrawal array
+// create withdrawal array | filter
 const withdrawal = movements.filter(mov => mov < 0);
 console.log(withdrawal);
 
-//balence with reduce method
+//balence | reduce 
 const balance = movements.reduce((acc, cur) => acc + cur, 0);
 console.log(balance);
 
-//maximum value
+//maximum value | reduce
 const max = movements.reduce(
   (acc, mov) => (acc > mov ? acc : mov),
   movements[0]
 );
 console.log(max);
 
-//convert to usd
+//convert to usd | filter | map
 const eurToUsd = 1.1;
 const totalDepositsUSD = movements
   .filter(mov => mov > 0)
@@ -226,4 +237,29 @@ const totalDepositsUSD = movements
     mov * eurToUsd;
   })
   .reduce((acc, mov) => acc + mov, 0);
-console.log(totalDepositsUSD);
+console.log(totalDepositsUSD); 
+
+// verify some deposit | some | includes
+//includes
+console.log(movements);
+console.log(movements.includes(-130));
+
+//some ("any?")
+const anyDeposits = movements.some(mov => mov > 0);
+console.log(anyDeposits)
+
+//every | returns true if all movements are true
+console.log(account4.movements.every(mov => mov > 0 ));
+
+// separete call back (DRY)
+const deposit = mov => mov > 0; 
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+*/
+// flat 
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+const arrdeep =  [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrdeep.flat(2));
