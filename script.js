@@ -87,9 +87,11 @@ const updateUI = function (acc) {
 }
 
 //Add movements
-const displayMovements = function (movements) {
-  //Cleaning the conteiner
+const displayMovements = function (movements, sort = false) {
+  //ading sort method
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
 
+  //Cleaning the conteiner
   //The Element property innerHTML gets or sets the HTML
   //or XML markup contained within the element.
   //To insert the HTML into the document rather than replace
@@ -97,7 +99,7 @@ const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
 
   //Add movements
-  movements.forEach(function (mov, i) {
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
         <div class="movements__row">
@@ -196,6 +198,13 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 })
 
+let sorted = false;
+btnSort.addEventListener('click', function(e){
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+})
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -256,10 +265,42 @@ const deposit = mov => mov > 0;
 console.log(movements.some(deposit));
 console.log(movements.every(deposit));
 console.log(movements.filter(deposit));
-*/
+
 // flat 
 const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
 console.log(arr.flat());
 
 const arrdeep =  [[[1, 2], 3], [4, [5, 6]], 7, 8];
 console.log(arrdeep.flat(2));
+
+const accountMovements = accounts.map(acc => acc.movements);
+const allMovements = accountMovements.flat();
+console.log(allMovements);
+const overalBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance);
+
+// flat | same but shorter
+const overalBalance2 = accounts.map(acc => acc.movements).flat().reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance2);
+
+//flatMap | "one level deep" 
+const overalBalance3 = accounts.flatMap(acc => acc.movements).reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance3); 
+
+//sorting arrays
+
+//strings | sort
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+console.log(owners);
+
+//Numbers
+//retur < 0, a, b
+//return > 0, b, a
+// ascending
+movements.sort((a, b) => a - b)
+console.log(movements);
+
+//descending
+movements.sort((a,b) => b - a)
+console.log(movements);   */
