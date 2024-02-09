@@ -1,9 +1,5 @@
 'use strict';
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
-
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -135,7 +131,7 @@ const calcDisplaySummary = function (acc) {
   labelSumInterest.textContent = `${interest} €`;
 };
 
-//login
+//Login
 let currentAccount;
 
 btnLogin.addEventListener('click', function (e) {
@@ -171,7 +167,7 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
-//some method request ioan
+//Some method request ioan
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Number(inputLoanAmount.value);
@@ -182,7 +178,7 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
 })
 
-//using findIndex method 
+//Using findIndex method 
 //Close account function
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
@@ -199,129 +195,8 @@ btnClose.addEventListener('click', function (e) {
 })
 
 let sorted = false;
-btnSort.addEventListener('click', function(e){
+btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted;
-})
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
-
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-/////////////////////////////////////////////////
-/*
-//create deposits array | filter
-const deposits = movements.filter(mov => mov > 0);
-console.log(deposits);
-
-// create withdrawal array | filter
-const withdrawal = movements.filter(mov => mov < 0);
-console.log(withdrawal);
-
-//balence | reduce 
-const balance = movements.reduce((acc, cur) => acc + cur, 0);
-console.log(balance);
-
-//maximum value | reduce
-const max = movements.reduce(
-  (acc, mov) => (acc > mov ? acc : mov),
-  movements[0]
-);
-console.log(max);
-
-//convert to usd | filter | map
-const eurToUsd = 1.1;
-const totalDepositsUSD = movements
-  .filter(mov => mov > 0)
-  .map((mov, i, arr) => {
-    mov * eurToUsd;
-  })
-  .reduce((acc, mov) => acc + mov, 0);
-console.log(totalDepositsUSD); 
-
-// verify some deposit | some | includes
-//includes
-console.log(movements);
-console.log(movements.includes(-130));
-
-//some ("any?")
-const anyDeposits = movements.some(mov => mov > 0);
-console.log(anyDeposits)
-
-//every | returns true if all movements are true
-console.log(account4.movements.every(mov => mov > 0 ));
-
-// separete call back (DRY)
-const deposit = mov => mov > 0; 
-console.log(movements.some(deposit));
-console.log(movements.every(deposit));
-console.log(movements.filter(deposit));
-
-// flat 
-const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
-console.log(arr.flat());
-
-const arrdeep =  [[[1, 2], 3], [4, [5, 6]], 7, 8];
-console.log(arrdeep.flat(2));
-
-const accountMovements = accounts.map(acc => acc.movements);
-const allMovements = accountMovements.flat();
-console.log(allMovements);
-const overalBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
-console.log(overalBalance);
-
-// flat | same but shorter
-const overalBalance2 = accounts.map(acc => acc.movements).flat().reduce((acc, mov) => acc + mov, 0);
-console.log(overalBalance2);
-
-//flatMap | "one level deep" 
-const overalBalance3 = accounts.flatMap(acc => acc.movements).reduce((acc, mov) => acc + mov, 0);
-console.log(overalBalance3); 
-
-//sorting arrays
-
-//strings | sort
-const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
-console.log(owners.sort());
-console.log(owners);
-
-//Numbers
-//retur < 0, a, b
-//return > 0, b, a
-// ascending
-movements.sort((a, b) => a - b)
-console.log(movements);
-
-//descending
-movements.sort((a,b) => b - a)
-console.log(movements);   
-
-//creating arrays | fill method
-const arr = ([1, 2, 3, 4, 5, 6, 7]);
-console.log(new Array(1, 2, 3, 4, 5, 6, 7));
-
-const x = new Array(7);
-console.log(x);
-console.log(x.map(() => 5));
-x.fill(1);
-x.fill(1, 3, 5)
-console.log(x);
-
-arr.fill(23, 2, 6);
-console.log(arr)
-
-//Array.from
-const y = Array.from({length: 7}, () => 1);
-console.log(y); 
-
-const z = Array.from({length:7}, ( _, i)=> i + 1);
-console.log(z); */
+});
