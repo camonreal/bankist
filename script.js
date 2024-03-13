@@ -89,36 +89,33 @@ const calcDisplayBalance = function (acc) {
 };
 
 const updateUI = function (acc) {
-  displayMovements(acc.movements);
+  displayMovements(acc);
   calcDisplayBalance(acc);
   calcDisplaySummary(acc);
 }
 
-//Add movements
-const displayMovements = function (movements, sort = false) {
-  //ading sort method
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
-
-  //Cleaning the conteiner
-  //The Element property innerHTML gets or sets the HTML
-  //or XML markup contained within the element.
-  //To insert the HTML into the document rather than replace
-  // the contents of an element, use the method insertAdjacentHTML(). -- MDN
+const displayMovements = function (acc, sort = false) {
+  const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
   containerMovements.innerHTML = '';
 
   //Add movements
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    const date = new Date(acc.movementsDates[i]);
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+    const displayDate = `${day}/${month}/${year}`;
+
     const html = `
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">${i + 1
       } ${type}</div>
+          <div class="movements__date">${displayDate}</div>
           <div class="movements__value">${mov.toFixed(2)}</div>
         </div>
       `;
-    //The insertAdjacentHTML() method of the Element interface parses
-    //the specified text as HTML or XML and inserts the resulting nodes
-    //into the DOM tree at a specified position. --MDN
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
@@ -146,6 +143,11 @@ const calcDisplaySummary = function (acc) {
 //Login
 let currentAccount;
 
+//fake login
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
@@ -154,6 +156,15 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]
       }`;
     containerApp.style.opacity = 100;
+
+    const now = new Date();
+    const day = `${now.getDate()}`.padStart(2, 0);
+    const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    const year = now.getFullYear();
+    const hour = `${now.getHours()}`.padStart(2, 0);
+    const min = `${now.getMinutes()}`.padStart(2, 0);
+    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
     updateUI(currentAccount);
@@ -175,6 +186,8 @@ btnTransfer.addEventListener('click', function (e) {
   ) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString)();
     updateUI(currentAccount);
   }
 });
@@ -185,12 +198,12 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     currentAccount.movements.push(amount);
+    currentAccount.movementsDates.push(new Date().toISOString())
     updateUI(currentAccount);
   }
   inputLoanAmount.value = '';
 })
 
-//Using findIndex method 
 //Close account function
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
